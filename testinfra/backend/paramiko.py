@@ -36,6 +36,7 @@ class IgnorePolicy(paramiko.MissingHostKeyPolicy):
 
 class ParamikoBackend(base.BaseBackend):
     NAME = "paramiko"
+    cmd_prefix = ""
 
     def __init__(self, hostspec, ssh_config=None, *args, **kwargs):
         self.host, self.user, self.port = self.parse_hostspec(hostspec)
@@ -83,6 +84,7 @@ class ParamikoBackend(base.BaseBackend):
         return rc, stdout, stderr
 
     def run(self, command, *args, **kwargs):
+        command = self.cmd_prefix + " " + command
         command = self.get_command(command, *args)
         command = self.encode(command)
         try:
