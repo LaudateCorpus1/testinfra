@@ -35,14 +35,17 @@ class Salt(InstanceModule):
     Run ``salt-call sys.doc`` to get a complete list of functions
     """
 
-    def __call__(self, function, args=None, local=False, sudo=False):
+    def __call__(self, function, args=None, local=False, sudo=False, exe=False):
         args = args or []
         if isinstance(args, six.string_types):
             args = [args]
         if self._backend.HAS_RUN_SALT:
             return self._backend.run_salt(function, args)
         else:
-            cmd = "salt-call --out=json"
+            if exe:
+                cmd = "salt-call.exe --out=json"
+            else:
+                cmd = "salt-call --out=json"
             if local:
                 cmd += " --local"
             if sudo:
