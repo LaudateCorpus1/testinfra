@@ -162,7 +162,7 @@ class BaseBackend(object):
     def run(self, command, *args, **kwargs):
         raise NotImplementedError
 
-    def run_local(self, command, *args):
+    def run_local(self, command, *args, **kwargs):
         command = self.quote(command, *args)
         command = self.encode(command)
         p = subprocess.Popen(
@@ -170,6 +170,7 @@ class BaseBackend(object):
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
+            **kwargs
         )
         stdout, stderr = p.communicate()
         result = self.result(p.returncode, command, stdout, stderr)
